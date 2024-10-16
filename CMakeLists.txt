@@ -44,6 +44,13 @@ if(WITH_VCHAN)
     add_definitions(-DVCHAN)
 endif()
 
+if(WITH_TEST)
+    add_compile_definitions(AOS_CONFIG_TYPES_URL_LEN=512 AOS_CONFIG_FS_FILE_PATH_LEN=512)
+endif()
+
+set(AOS_CORE_LIB_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/aos_core_common_cpp/external/aos_core_lib_cpp)
+set(AOS_CORE_COMMON_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/aos_core_common_cpp)
+
 # ######################################################################################################################
 # Versioning
 # ######################################################################################################################
@@ -69,15 +76,6 @@ include_directories(${CMAKE_BINARY_DIR})
 # ######################################################################################################################
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-# Aos core lib
-include(AosCoreLib)
-
-# Aos core common
-include(AosCoreCommon)
-
-# Aos core API
-include(AosCoreAPI)
 
 # Find the libcurl package
 find_package(CURL REQUIRED)
@@ -122,9 +120,13 @@ endif()
 # Targets
 # ######################################################################################################################
 
+add_subdirectory(external/aos_core_common_cpp/external/aos_core_lib_cpp/src)
+add_subdirectory(external/api)
+add_subdirectory(external/aos_core_common_cpp/src)
 add_subdirectory(src)
 
 if(WITH_TEST)
+    add_subdirectory(external/aos_core_common_cpp/external/aos_core_lib_cpp/tests/utils)
     add_subdirectory(tests)
 endif()
 
