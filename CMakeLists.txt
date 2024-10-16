@@ -44,6 +44,10 @@ if(WITH_VCHAN)
     add_definitions(-DVCHAN)
 endif()
 
+if(WITH_TEST)
+    add_compile_definitions(AOS_CONFIG_TYPES_URL_LEN=512 AOS_CONFIG_FS_FILE_PATH_LEN=512)
+endif()
+
 # ######################################################################################################################
 # Versioning
 # ######################################################################################################################
@@ -69,15 +73,6 @@ include_directories(${CMAKE_BINARY_DIR})
 # ######################################################################################################################
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-# Aos core lib
-include(AosCoreLib)
-
-# Aos core common
-include(AosCoreCommon)
-
-# Aos core API
-include(AosCoreAPI)
 
 # Find the libcurl package
 find_package(CURL REQUIRED)
@@ -122,6 +117,8 @@ endif()
 # Targets
 # ######################################################################################################################
 
+add_subdirectory(external/api)
+add_subdirectory(external/aos_core_common_cpp)
 add_subdirectory(src)
 
 if(WITH_TEST)
