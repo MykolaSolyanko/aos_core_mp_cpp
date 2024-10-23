@@ -29,6 +29,11 @@ namespace aos::mp::communication {
 class CommunicationManager : public CommunicationManagerItf {
 public:
     /**
+     * Constructor.
+     */
+    CommunicationManager() = default;
+
+    /**
      * Initializes communication manager.
      *
      * @param cfg Configuration
@@ -93,9 +98,9 @@ private:
 
     TransportItf*                                        mTransport {};
     iamclient::CertProviderItf*                          mCertProvider {};
-    cryptoutils::CertLoaderItf*                          mCertLoader;
-    crypto::x509::ProviderItf*                           mCryptoProvider;
-    const config::Config*                                mCfg;
+    cryptoutils::CertLoaderItf*                          mCertLoader {};
+    crypto::x509::ProviderItf*                           mCryptoProvider {};
+    const config::Config*                                mCfg {};
     std::map<int, std::shared_ptr<CommunicationChannel>> mChannels;
     std::thread                                          mThread;
     std::atomic<bool>                                    mShutdown {};
