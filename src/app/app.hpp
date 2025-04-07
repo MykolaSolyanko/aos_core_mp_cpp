@@ -7,7 +7,9 @@
 #ifndef APP_HPP_
 #define APP_HPP_
 
+#include <functional>
 #include <optional>
+#include <vector>
 
 #include <Poco/Util/ServerApplication.h>
 
@@ -30,6 +32,16 @@
 
 #include "config/config.hpp"
 #include "iamclient/publicnodeclient.hpp"
+
+class CleanupManager {
+public:
+    void AddCleanup(std::function<void()>&& cleanup);
+
+    void ExecuteCleanups();
+
+private:
+    std::vector<std::function<void()>> mCleanups;
+};
 
 /**
  * Aos message-proxy application.
@@ -59,6 +71,9 @@ private:
     void HandleLogLevel(const std::string& name, const std::string& value);
     void HandleConfigFile(const std::string& name, const std::string& value);
 
+    void Init();
+    void Start();
+
     aos::common::logger::Logger mLogger;
     bool                        mStopProcessing = false;
     bool                        mProvisioning   = false;
@@ -85,6 +100,7 @@ private:
     aos::mp::communication::IAMConnection        mIAMProtectedConnection;
     aos::mp::communication::CMConnection         mCMConnection;
     aos::common::downloader::Downloader          mDownloader;
+    CleanupManager                               mCleanupManager;
 };
 
 #endif
